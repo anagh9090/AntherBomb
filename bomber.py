@@ -26,7 +26,7 @@ except ImportError:
 
 # Constants & Configuration
 __VERSION__ = "1.0-local"
-__CONTRIBUTORS__ = ['SpeedX', 't0xic0der', 'scpketer', 'Stefan']
+__CONTRIBUTORS__ = ['anagh9090']
 ALL_COLORS = [Fore.GREEN, Fore.RED, Fore.YELLOW, Fore.BLUE, Fore.MAGENTA, Fore.CYAN, Fore.WHITE]
 RESET_ALL = Style.RESET_ALL
 ASCII_MODE = False
@@ -44,13 +44,14 @@ def clr():
 
 def bann_text():
     clr()
-    logo = """
-         _____          __  .__                __________              ___.
-  /  _  \   _____/  |_|  |__   __________\______   \ ____   _____\_ |__
- /  /_\  \ /    \    __\  |  \_/ __ \_  __ \    |  _//  _ \ /     \| __ \
-/    |    \    |  \  | |   Y  \  ___/|  | \/    |   (  <_> )  Y Y  \ \_\ \
-\____|__  /___|  /__| |___|  /\___  >__|     |______  /\____/|__|_|  /___  /
-        \/     \/          \/     \/                \/              \/    \/
+    # Added r prefix to solve SyntaxWarning: invalid escape sequence
+    logo = r"""
+          _____          __  .__                __________              ___.
+   /  _  \   _____/  |_|  |__   __________\______   \ ____   _____\_ |__
+  /  /_\  \ /    \    __\  |  \_/ __ \_  __ \    |  _//  _ \ /     \| __ \
+ /    |    \    |  \  | |   Y  \  ___/|  | \/    |   (  <_> )  Y Y  \ \_\ \
+ \____|__  /___|  /__| |___|  /\___  >__|     |______  /\____/|__|_|  /___  /
+         \/     \/          \/     \/                \/              \/    \/
 """
     if ASCII_MODE:
         logo = ""
@@ -135,7 +136,7 @@ def workernode(mode, cc, target, count, delay, max_threads):
                     failed += 1
                 clr()
                 pretty_print(cc, target, success, failed)
-    
+
     print("\n")
     mesgdcrt.SuccessMessage("Bombing completed!")
     time.sleep(1.5)
@@ -156,7 +157,7 @@ def selectnode(mode="sms"):
                 max_limit.update({"sms": 100})
         elif mode == "mail":
             target = get_mail_info()
-        
+
         limit = max_limit[mode]
         while True:
             try:
@@ -164,7 +165,7 @@ def selectnode(mode="sms"):
                 count = int(input(mesgdcrt.CommandMessage(message)).strip())
                 if count > limit or count <= 0:
                     count = limit
-                
+
                 delay = float(input(mesgdcrt.CommandMessage("Enter delay (seconds): ")).strip())
                 max_thread_limit = (count // 10) if (count // 10) > 0 else 1
                 max_threads = int(input(mesgdcrt.CommandMessage("Threads (Rec: {m}): ".format(m=max_thread_limit))).strip())
@@ -185,16 +186,17 @@ except Exception:
     sys.exit(1)
 
 parser = argparse.ArgumentParser(description="Friendly Spammer Application")
-parser.add_argument("-sms", action="store_true")
-parser.add_argument("-call", action="store_true")
-parser.add_argument("-mail", action="store_true")
-parser.add_argument("-ascii", action="store_true")
+# Added double dashes to allow --sms, --call, etc.
+parser.add_argument("--sms", action="store_true")
+parser.add_argument("--call", action="store_true")
+parser.add_argument("--mail", action="store_true")
+parser.add_argument("--ascii", action="store_true")
 
 if __name__ == "__main__":
     args = parser.parse_args()
     if args.ascii:
         ASCII_MODE = True
-    
+
     if args.mail:
         selectnode(mode="mail")
     elif args.call:
